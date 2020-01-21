@@ -1,14 +1,14 @@
 name: daylight
 description: Get the sunset and sunrise times for a geolocation without having to access any api.
 version: 0.0.1
-homepage:
+homepage: https://github.com/renancaraujo/daylight
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  intl:
-  angles: 1.2.1
+  intl: ^0.16.1
+  angles: ^1.2.1
   flutter:
     sdk: flutter
 
