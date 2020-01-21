@@ -1,5 +1,7 @@
 # Dart Daylight
 
+[![Pub](https://img.shields.io/pub/v/daylight.svg?style=popout)](https://pub.dartlang.org/packages/daylight)
+
 Get the sunset and sunrise times for a geolocation without having to access any api.
 
 This is a simple implementation of the legendary [Sunset/Sunrise](https://web.archive.org/web/20161202180207/http://williams.best.vwh.net/sunrise_sunset_algorithm.htm) algorithm.
