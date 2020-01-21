@@ -1,4 +1,4 @@
-# dart Daylight
+# Dart Daylight
 
 Get the sunset and sunrise times for a geolocation without having to access any api.
 
