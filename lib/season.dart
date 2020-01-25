@@ -1,3 +1,4 @@
+/// Enum representing the seasons
 enum Season {
   winter,
   spring,
@@ -5,9 +6,13 @@ enum Season {
   autumn,
 }
 
-// Credits to: https://github.com/flutter/samples/blob/master/veggieseasons/lib/data/app_state.dart#L44
+extension InverseSeason on Season {
+  Season get inverse => Season.values[(index + 2) % 4];
+}
+
 extension SeasonDate on DateTime {
-  Season getSeason() {
+  /// Retrieves the season for the current datetime instance
+  Season get seasonNorth {
     switch (month) {
       case 1:
       case 2:
@@ -23,14 +28,16 @@ extension SeasonDate on DateTime {
       case 8:
         return Season.summer;
       case 9:
-        return day < 22 ? Season.autumn : Season.winter;
+        return day < 22 ? Season.autumn : Season.summer;
       case 10:
       case 11:
         return Season.autumn;
       case 12:
         return day < 22 ? Season.autumn : Season.winter;
       default:
-        throw ArgumentError('Can\'t return a season for month #${month}.');
+        throw ArgumentError('This month doesnt exist #$month.');
     }
   }
+
+  Season get seasonSouth => seasonNorth.inverse;
 }

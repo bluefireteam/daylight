@@ -31,7 +31,7 @@ extension DayTypeUtils on DayType {
 /// More info at: https://www.timeanddate.com/astronomy/different-types-twilight.html
 /// Added two extra positions: [official], for when the sun is crosses the horizon line and [golden]
 /// for when the sun is near the horizon.
-enum Zenith { astronomical, nautical, civil, official, golden, _custom }
+enum Zenith { astronomical, nautical, civil, official, golden }
 
 /// Extension that adds [angle] prop to retrieve angle value (in grads) for a specific [Zenith]
 extension ZenithAngle on Zenith {
@@ -58,20 +58,22 @@ extension ZenithAngle on Zenith {
 
 /// Defines a snapshot result for a daylight calculation.
 class DaylightResult {
+  DaylightResult(this.sunrise, this.sunset, this._date, this._location);
+
   /// Time of the sunrise
   final DateTime sunrise;
 
   /// Time of the sunset
   final DateTime sunset;
   final DateTime _date;
-
-  DaylightResult(this.sunrise, this.sunset, this._date);
+  final Location _location;
 
   /// Define  which sun events happens in the snapshot date
   DayType get type {
     if (sunrise == null) {
       if (sunset == null) {
-        final season = _date.getSeason();
+        final season =
+            (_location.isNorth) ? _date.seasonNorth : _date.seasonSouth;
         if (season == Season.winter) {
           return DayType.allNight;
         }
@@ -91,10 +93,10 @@ class DaylightResult {
 
 /// Class that wraps all daylight calculations
 class DaylightCalculator {
+  const DaylightCalculator(this.location);
+
   /// The specific coordinate location for the calculation.
   final Location location;
-
-  const DaylightCalculator(this.location);
 
   /// Calculate both sunset and sunrise times for optional [Zenith] and returns in a [DaylightResult]
   DaylightResult calculateForDay(
@@ -103,31 +105,33 @@ class DaylightCalculator {
   ]) {
     final sunsetDateTime = calculateEvent(date, zenith, EventType.sunset);
     final sunriseDateTime = calculateEvent(date, zenith, EventType.sunrise);
-    return DaylightResult(sunriseDateTime, sunsetDateTime, date);
+    return DaylightResult(sunriseDateTime, sunsetDateTime, date, location);
   }
 
   /// Calculate the time of an specific sun event
   DateTime calculateEvent(DateTime date, Zenith zenith, EventType type) {
-    final lastMidnight = new DateTime(date.year, date.month, date.day);
+    final lastMidnight = DateTime(date.year, date.month, date.day);
 
-    double eventMils = _calculate(date, zenith, EventType.sunrise);
+    final double eventMils = _calculate(date, zenith, EventType.sunrise);
 
-    if (eventMils == null) return null;
-    int mils = (lastMidnight.millisecondsSinceEpoch + eventMils).floor();
+    if (eventMils == null) {
+      return null;
+    }
+    final int mils = (lastMidnight.millisecondsSinceEpoch + eventMils).floor();
     return DateTime.fromMillisecondsSinceEpoch(mils);
   }
 
   double _calculate(DateTime time, Zenith zenith, EventType type) {
-    double baseLongHour = location.long / 15;
+    final double baseLongHour = location.long / 15;
 
-    double hour = _longToHour(time, type == EventType.sunrise ? 6 : 18);
+    final double hour = _longToHour(time, type == EventType.sunrise ? 6 : 18);
 
-    double meanAnomaly = (0.9856 * hour) - 3.289;
+    final double meanAnomaly = (0.9856 * hour) - 3.289;
 
-    double sunTrueLong = _sunTrueLong(meanAnomaly);
-    double sunRightAsc = _sunRightAsc(sunTrueLong);
+    final double sunTrueLong = _sunTrueLong(meanAnomaly);
+    final double sunRightAsc = _sunRightAsc(sunTrueLong);
 
-    double sunLocalHourCos = _sunLocalHourCos(sunTrueLong, zenith);
+    final double sunLocalHourCos = _sunLocalHourCos(sunTrueLong, zenith);
 
     if (type == EventType.sunrise && sunLocalHourCos > 1) {
       return null; // no sunrise
@@ -136,31 +140,31 @@ class DaylightCalculator {
       return null; // no sunset
     }
 
-    double sunLocalHourAngle = _sunLocalHourAngle(sunLocalHourCos, type);
+    final double sunLocalHourAngle = _sunLocalHourAngle(sunLocalHourCos, type);
 
-    double localMeanTime =
+    final double localMeanTime =
         sunLocalHourAngle + sunRightAsc - (0.06571 * hour) - 6.622;
 
-    double utcMeanTime = fixValue(localMeanTime, 0, 24) - baseLongHour;
-    double localT = utcMeanTime + time.timeZoneOffset.inHours;
+    final double utcMeanTime = fixValue(localMeanTime, 0, 24) - baseLongHour;
+    final double localT = utcMeanTime + time.timeZoneOffset.inHours;
 
     //return in mils
     return localT * 3600 * 1000;
   }
 
   double _longToHour(DateTime utc, int offset) {
-    double baseLongHour = location.long / 15;
-    int dayOfYear = int.parse(DateFormat("D").format(utc));
+    final double baseLongHour = location.long / 15;
+    final int dayOfYear = int.parse(DateFormat("D").format(utc));
 
-    double difference = offset - baseLongHour;
+    final double difference = offset - baseLongHour;
 
     return dayOfYear + (difference / 24);
   }
 
   double _sunTrueLong(double meanAnomaly) {
-    final multiplier = 1.916;
-    final degMultiplier = 0.020;
-    final addend = 282.634;
+    const multiplier = 1.916;
+    const degMultiplier = 0.020;
+    const addend = 282.634;
     final meanSin = math.sin(degToRad(meanAnomaly));
     final doubleMeanSin = math.sin(degToRad(2 * meanAnomaly));
 
@@ -174,35 +178,39 @@ class DaylightCalculator {
     final rightAsc = fixValue(
         radToDeg(math.atan(0.91764 * math.tan(degToRad(sunTrueLong)))));
 
-    final longQuadrant = ((sunTrueLong / 90).floor() * 90);
-    final ascQuadrant = ((rightAsc / 90).floor() * 90);
+    final longQuadrant = (sunTrueLong / 90).floor() * 90;
+    final ascQuadrant = (rightAsc / 90).floor() * 90;
 
     return (rightAsc + (longQuadrant - ascQuadrant)) / 15;
   }
 
   double _sunLocalHourCos(double sunTrueLong, Zenith zenith) {
     // sun declination
-    double sinDec = 0.39782 * math.sin(degToRad(sunTrueLong));
-    double cosDec = math.cos(math.asin(sinDec));
+    final double sinDec = 0.39782 * math.sin(degToRad(sunTrueLong));
+    final double cosDec = math.cos(math.asin(sinDec));
 
-    double cosZenith = math.cos(degToRad(zenith.angle));
-    double sinLat = math.sin(degToRad(location.lat));
-    double cosLat = math.cos(degToRad(location.lat));
+    final double cosZenith = math.cos(degToRad(zenith.angle));
+    final double sinLat = math.sin(degToRad(location.lat));
+    final double cosLat = math.cos(degToRad(location.lat));
 
     return (cosZenith - (sinDec * sinLat)) / (cosDec * cosLat);
   }
 
   double _sunLocalHourAngle(double sunLocalHourCos, EventType eventType) {
-    double acos = radToDeg(math.acos(sunLocalHourCos));
-    double acosEvent = eventType == EventType.sunrise ? 360 - acos : acos;
+    final double acos = radToDeg(math.acos(sunLocalHourCos));
+    final double acosEvent = eventType == EventType.sunrise ? 360 - acos : acos;
 
     return acosEvent / 15;
   }
 }
 
 double fixValue(double value, [double min = 0, double max = 360]) {
-  if (value < min) return value + (max - min);
-  if (value >= max) return value - (max - min);
+  if (value < min) {
+    return value + (max - min);
+  }
+  if (value >= max) {
+    return value - (max - min);
+  }
   return value;
 }
 
@@ -211,8 +219,10 @@ double radToDeg(double rad) => Angle.fromRadians(rad).degrees;
 double degToRad(double deg) => Angle.fromDegrees(deg).radians;
 
 class Location {
+  const Location(this.lat, this.long);
+
   final double lat;
   final double long;
 
-  Location(this.lat, this.long);
+  bool get isNorth => lat > 0;
 }
