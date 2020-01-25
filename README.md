@@ -1,4 +1,5 @@
 # Dart Daylight
+[![Pub](https://img.shields.io/pub/v/daylight.svg?style=popout)](https://pub.dartlang.org/packages/daylight)
 
 [![Pub](https://img.shields.io/pub/v/daylight.svg?style=popout)](https://pub.dartlang.org/packages/daylight)
 

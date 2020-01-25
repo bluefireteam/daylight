@@ -5,28 +5,35 @@ import 'package:daylight/season.dart';
 import 'package:intl/intl.dart';
 import 'package:angles/angles.dart';
 
+/// Enum that defines in with scope the zenith time will be calculated.
 enum EventType { sunrise, sunset }
 
+/// Enum that defines which sun events happens in a specific day
 enum DayType { sunriseAndSunset, sunriseOnly, sunsetOnly, allDay, allNight }
 
+/// Extension that adds utility comparison methods into [DayType].
 extension DayTypeUtils on DayType {
+  /// See if this is a type that indicates no sun events
   bool get isNoChange => this == DayType.allDay || this == DayType.allNight;
 
+  /// Define if [DayType] indicates sunrise.
   bool get hasSunrise =>
       this == DayType.sunriseOnly || this == DayType.sunriseAndSunset;
 
+  /// Define if [DayType] indicates sunset.
   bool get hasSunset =>
       this == DayType.sunsetOnly || this == DayType.sunriseAndSunset;
 }
 
-enum Zenith {
-  astronomical,
-  nautical,
-  civil,
-  official,
-  golden,
-}
+/// Enum that defines the sun position in the event.
+///
+/// Twilights are divided in three phases: [civil], [nautical] and [astronomical].
+/// More info at: https://www.timeanddate.com/astronomy/different-types-twilight.html
+/// Added two extra positions: [official], for when the sun is crosses the horizon line and [golden]
+/// for when the sun is near the horizon.
+enum Zenith { astronomical, nautical, civil, official, golden, _custom }
 
+/// Extension that adds [angle] prop to retrieve angle value (in grads) for a specific [Zenith]
 extension ZenithAngle on Zenith {
   double get angle {
     switch (this) {
@@ -49,13 +56,18 @@ extension ZenithAngle on Zenith {
   }
 }
 
+/// Defines a snapshot result for a daylight calculation.
 class DaylightResult {
+  /// Time of the sunrise
   final DateTime sunrise;
+
+  /// Time of the sunset
   final DateTime sunset;
   final DateTime _date;
 
   DaylightResult(this.sunrise, this.sunset, this._date);
 
+  /// Define  which sun events happens in the snapshot date
   DayType get type {
     if (sunrise == null) {
       if (sunset == null) {
@@ -77,33 +89,35 @@ class DaylightResult {
   }
 }
 
+/// Class that wraps all daylight calculations
 class DaylightCalculator {
+  /// The specific coordinate location for the calculation.
   final Location location;
 
   const DaylightCalculator(this.location);
 
-  DaylightResult calculateForDay(DateTime date,
-      [Zenith zenith = Zenith.official]) {
-    final lastMidnight = new DateTime(date.year, date.month, date.day);
-
-    double sunriseMils = calculateEvent(date, zenith, EventType.sunrise);
-    DateTime sunriseDateTime;
-    if (sunriseMils != null) {
-      int mils = (lastMidnight.millisecondsSinceEpoch + sunriseMils).floor();
-      sunriseDateTime = DateTime.fromMillisecondsSinceEpoch(mils);
-    }
-
-    double sunsetMils = calculateEvent(date, zenith, EventType.sunset);
-    DateTime sunsetDateTime;
-    if (sunsetMils != null) {
-      int mils = (lastMidnight.millisecondsSinceEpoch + sunsetMils).floor();
-      sunsetDateTime = DateTime.fromMillisecondsSinceEpoch(mils, isUtc: false);
-    }
-
+  /// Calculate both sunset and sunrise times for optional [Zenith] and returns in a [DaylightResult]
+  DaylightResult calculateForDay(
+    DateTime date, [
+    Zenith zenith = Zenith.official,
+  ]) {
+    final sunsetDateTime = calculateEvent(date, zenith, EventType.sunset);
+    final sunriseDateTime = calculateEvent(date, zenith, EventType.sunrise);
     return DaylightResult(sunriseDateTime, sunsetDateTime, date);
   }
 
-  double calculateEvent(DateTime time, Zenith zenith, EventType type) {
+  /// Calculate the time of an specific sun event
+  DateTime calculateEvent(DateTime date, Zenith zenith, EventType type) {
+    final lastMidnight = new DateTime(date.year, date.month, date.day);
+
+    double eventMils = _calculate(date, zenith, EventType.sunrise);
+
+    if (eventMils == null) return null;
+    int mils = (lastMidnight.millisecondsSinceEpoch + eventMils).floor();
+    return DateTime.fromMillisecondsSinceEpoch(mils);
+  }
+
+  double _calculate(DateTime time, Zenith zenith, EventType type) {
     double baseLongHour = location.long / 15;
 
     double hour = _longToHour(time, type == EventType.sunrise ? 6 : 18);
@@ -199,5 +213,6 @@ double degToRad(double deg) => Angle.fromDegrees(deg).radians;
 class Location {
   final double lat;
   final double long;
+
   Location(this.lat, this.long);
 }
