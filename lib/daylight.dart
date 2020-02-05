@@ -1,10 +1,9 @@
 library daylight;
 
 import 'dart:math' as math;
-import 'package:daylight/season.dart';
+import 'package:daylight/src/season.dart';
 import 'package:intl/intl.dart';
 import 'package:angles/angles.dart';
-import 'package:test/test.dart';
 
 /// Enum that defines in with scope the zenith time will be calculated.
 enum EventType { sunrise, sunset }
@@ -165,8 +164,8 @@ class DaylightCalculator {
     const multiplier = 1.916;
     const degMultiplier = 0.020;
     const addend = 282.634;
-    final meanSin = math.sin(degToRad(meanAnomaly));
-    final doubleMeanSin = math.sin(degToRad(2 * meanAnomaly));
+    final meanSin = math.sin(_degToRad(meanAnomaly));
+    final doubleMeanSin = math.sin(_degToRad(2 * meanAnomaly));
 
     return _fixValue(meanAnomaly +
         (multiplier * meanSin) +
@@ -176,7 +175,7 @@ class DaylightCalculator {
 
   double _sunRightAsc(double sunTrueLong) {
     final rightAsc = _fixValue(
-        radToDeg(math.atan(0.91764 * math.tan(degToRad(sunTrueLong)))));
+        _radToDeg(math.atan(0.91764 * math.tan(_degToRad(sunTrueLong)))));
 
     final longQuadrant = (sunTrueLong / 90).floor() * 90;
     final ascQuadrant = (rightAsc / 90).floor() * 90;
@@ -186,18 +185,18 @@ class DaylightCalculator {
 
   double _sunLocalHourCos(double sunTrueLong, Zenith zenith) {
     // sun declination
-    final double sinDec = 0.39782 * math.sin(degToRad(sunTrueLong));
+    final double sinDec = 0.39782 * math.sin(_degToRad(sunTrueLong));
     final double cosDec = math.cos(math.asin(sinDec));
 
-    final double cosZenith = math.cos(degToRad(zenith.angle));
-    final double sinLat = math.sin(degToRad(location.lat));
-    final double cosLat = math.cos(degToRad(location.lat));
+    final double cosZenith = math.cos(_degToRad(zenith.angle));
+    final double sinLat = math.sin(_degToRad(location.lat));
+    final double cosLat = math.cos(_degToRad(location.lat));
 
     return (cosZenith - (sinDec * sinLat)) / (cosDec * cosLat);
   }
 
   double _sunLocalHourAngle(double sunLocalHourCos, EventType eventType) {
-    final double acos = radToDeg(math.acos(sunLocalHourCos));
+    final double acos = _radToDeg(math.acos(sunLocalHourCos));
     final double acosEvent = eventType == EventType.sunrise ? 360 - acos : acos;
 
     return acosEvent / 15;
@@ -214,10 +213,11 @@ double _fixValue(double value, [double min = 0, double max = 360]) {
   return value;
 }
 
-double radToDeg(double rad) => Angle.fromRadians(rad).degrees;
+double _radToDeg(double rad) => Angle.fromRadians(rad).degrees;
 
-double degToRad(double deg) => Angle.fromDegrees(deg).radians;
+double _degToRad(double deg) => Angle.fromDegrees(deg).radians;
 
+/// Simple wrapper class for storing the geographical coordinates of a specific location.
 class DaylightLocation {
   const DaylightLocation(this.lat, this.long);
 
