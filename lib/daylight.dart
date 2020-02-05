@@ -67,7 +67,7 @@ class DaylightResult {
   /// Time of the sunset in UTC
   final DateTime sunset;
 
-  final Location location;
+  final DaylightLocation location;
 
   final DateTime _date;
 
@@ -96,7 +96,7 @@ class DaylightCalculator {
   const DaylightCalculator(this.location);
 
   /// The specific coordinate location for the calculation.
-  final Location location;
+  final DaylightLocation location;
 
   /// Calculate both sunset and sunrise times for optional [Zenith] and returns in a [DaylightResult]
   ///
@@ -218,8 +218,8 @@ double radToDeg(double rad) => Angle.fromRadians(rad).degrees;
 
 double degToRad(double deg) => Angle.fromDegrees(deg).radians;
 
-class Location {
-  const Location(this.lat, this.long);
+class DaylightLocation {
+  const DaylightLocation(this.lat, this.long);
 
   final double lat;
   final double long;
