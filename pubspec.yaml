@@ -1,6 +1,6 @@
 name: daylight
 description: Get the sunset and sunrise times for a geolocation without having to access any api.
-version: 0.2.0
+version: 1.0.0
 homepage: https://github.com/renancaraujo/daylight
 
 environment:
@@ -9,4 +9,6 @@ environment:
 dependencies:
   intl: ^0.16.1
   angles: ^1.2.1
+
+dev_dependencies:
   test: ^1.9.0

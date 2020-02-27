@@ -1,3 +1,6 @@
+## [1.0.0]
+- Closing major since API is stable and utc is defined as output
+
 ## [0.2.0]
 - Formalized API, tests and more docs.
 

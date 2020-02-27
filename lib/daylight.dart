@@ -120,7 +120,7 @@ class DaylightCalculator {
       return null;
     }
     final int mils = (lastMidnight.millisecondsSinceEpoch + eventMils).floor();
-    return DateTime.fromMillisecondsSinceEpoch(mils);
+    return DateTime.fromMillisecondsSinceEpoch(mils, isUtc: true);
   }
 
   double _calculate(DateTime time, Zenith zenith, EventType type) {

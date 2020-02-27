@@ -14,14 +14,18 @@ void main() {
     Zenith.civil,
     EventType.sunrise,
   );
-  print(DateFormat("HH:mm:ss").format(civilSunrise)); // utc: 05:58:18
+  print(DateFormat("HH:mm:ss").format(civilSunrise)); // utc: 04:58:18
 
   // calculate for sunrise and sunset on astronomical twilight
   final astronomicalEvents = berlinSunCalculator.calculateForDay(
     october,
-    Zenith.astronomical
+    Zenith.astronomical,
   );
-  print(DateFormat("HH:mm:ss").format(astronomicalEvents.sunset)); // utc: 19:03:55
-  print(DateFormat("HH:mm:ss").format(astronomicalEvents.sunrise)); // utc: 04:39:09
+  print(
+    DateFormat("HH:mm:ss").format(astronomicalEvents.sunset),
+  ); // utc: 18:03:55
+  print(
+    DateFormat("HH:mm:ss").format(astronomicalEvents.sunrise),
+  ); // utc: 03:39:09
   print(astronomicalEvents.type); // DayType.sunriseAndSunset
 }
