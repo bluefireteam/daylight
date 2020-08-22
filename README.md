@@ -15,7 +15,7 @@ Check the API [docs](https://pub.dev/documentation/daylight/latest/), [example](
 import 'package:daylight/daylight.dart';
 
 
-final berlin = Location(52.518611, 13.408056);
+final berlin = DaylightLocation(52.518611, 13.408056);
 final berlinCalculator = DaylightCalculator(berlin);
 final dailyResults = berlinCalculator.calculateForDay(DateTime.now(), Zenith.astronomical);
 print(dailyResults.sunrise); // Some UTC datetime with sunrise hours like 08:32
