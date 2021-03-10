@@ -7,7 +7,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  intl: ^0.16.1
+  intl: ^0.17.0
   angles: ^1.2.1
 
 dev_dependencies:
