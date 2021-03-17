@@ -61,10 +61,10 @@ class DaylightResult {
   DaylightResult(this.sunrise, this.sunset, this._date, this.location);
 
   /// Time of the sunset in UTC
-  final DateTime sunrise;
+  final DateTime? sunrise;
 
   /// Time of the sunset in UTC
-  final DateTime sunset;
+  final DateTime? sunset;
 
   final DaylightLocation location;
 
@@ -112,7 +112,7 @@ class DaylightCalculator {
   /// Calculate the time of an specific sun event
   ///
   /// Returns in UTC.
-  DateTime calculateEvent(DateTime date, Zenith zenith, EventType type) {
+  DateTime? calculateEvent(DateTime date, Zenith zenith, EventType type) {
     final lastMidnight = DateTime(date.year, date.month, date.day);
 
     final eventMils = _calculate(date, zenith, type);
@@ -123,7 +123,7 @@ class DaylightCalculator {
     return DateTime.fromMillisecondsSinceEpoch(mils, isUtc: true);
   }
 
-  double _calculate(DateTime time, Zenith zenith, EventType type) {
+  double? _calculate(DateTime time, Zenith zenith, EventType type) {
     final double baseLongHour = location.long / 15;
 
     final double hour = _longToHour(time, type == EventType.sunrise ? 6 : 18);

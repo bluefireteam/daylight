@@ -85,7 +85,7 @@ void main() {
               Zenith.official,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "21:36:33"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "21:36:33"); // UTC
             expect(time.isUtc, true);
           });
           test('nautical', () {
@@ -94,7 +94,7 @@ void main() {
               Zenith.nautical,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "20:42:09"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "20:42:09"); // UTC
             expect(time.isUtc, true);
           });
           test('civil', () {
@@ -103,7 +103,7 @@ void main() {
               Zenith.civil,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "21:11:36"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "21:11:36"); // UTC
             expect(time.isUtc, true);
           });
           test('astronomical', () {
@@ -112,7 +112,7 @@ void main() {
               Zenith.astronomical,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "20:11:56"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "20:11:56"); // UTC
             expect(time.isUtc, true);
           });
           test('golden', () {
@@ -121,7 +121,7 @@ void main() {
               Zenith.golden,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "21:59:38"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "21:59:38"); // UTC
             expect(time.isUtc, true);
           });
         });
@@ -133,7 +133,7 @@ void main() {
               Zenith.official,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "19:21:47"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "19:21:47"); // UTC
             expect(time.isUtc, true);
           });
           test('nautical', () {
@@ -142,7 +142,7 @@ void main() {
               Zenith.nautical,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "21:17:10"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "21:17:10"); // UTC
             expect(time.isUtc, true);
           });
           test('civil', () {
@@ -151,7 +151,7 @@ void main() {
               Zenith.civil,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "20:08:08"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "20:08:08"); // UTC
             expect(time.isUtc, true);
           });
           test('astronomical', () {
@@ -168,7 +168,7 @@ void main() {
               Zenith.golden,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time), "18:43:17"); // UTC
+            expect(DateFormat("HH:mm:ss").format(time!), "18:43:17"); // UTC
             expect(time.isUtc, true);
           });
         });
@@ -180,11 +180,11 @@ void main() {
           final resultForDay = calculator.calculateForDay(october);
 
           expect(
-            DateFormat("HH:mm:ss").format(resultForDay.sunrise),
+            DateFormat("HH:mm:ss").format(resultForDay.sunrise!),
             "05:32:48",
           ); // UTC
           expect(
-            DateFormat("HH:mm:ss").format(resultForDay.sunset),
+            DateFormat("HH:mm:ss").format(resultForDay.sunset!),
             "16:10:14",
           ); // UTC
         });
