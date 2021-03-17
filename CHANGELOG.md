@@ -1,3 +1,6 @@
+## [2.0.0]
+- Added support to NNBD
+
 ## [1.0.0]
 - Closing major since API is stable and utc is defined as output
 
