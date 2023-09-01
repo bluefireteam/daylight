@@ -1,43 +1,47 @@
 /// Enum representing the seasons
 enum Season {
+  /// Winter
   winter,
+
+  /// Spring
   spring,
+
+  /// Summer
   summer,
+
+  /// Autumn
   autumn,
 }
 
-extension InverseSeason on Season {
-  Season get inverse => Season.values[(index + 2) % 4];
-}
-
+/// Extension on [DateTime] to get the season
 extension SeasonDate on DateTime {
   /// Retrieves the season for the current datetime instance
   Season get seasonNorth {
     switch (month) {
-      case 1:
-      case 2:
+      case DateTime.january || DateTime.february:
         return Season.winter;
-      case 3:
+      case DateTime.march:
         return day < 21 ? Season.winter : Season.spring;
-      case 4:
-      case 5:
+      case DateTime.april || DateTime.may:
         return Season.spring;
-      case 6:
+      case DateTime.june:
         return day < 21 ? Season.spring : Season.summer;
-      case 7:
-      case 8:
+      case DateTime.july || DateTime.august:
         return Season.summer;
-      case 9:
-        return day < 22 ? Season.autumn : Season.summer;
-      case 10:
-      case 11:
+      case DateTime.september:
+        return day < 22 ? Season.summer : Season.autumn;
+      case DateTime.october || DateTime.november:
         return Season.autumn;
-      case 12:
+      case DateTime.december:
         return day < 22 ? Season.autumn : Season.winter;
-      default:
-        throw ArgumentError('This month doesnt exist #$month.');
     }
+    throw Exception('Invalid date');
   }
 
+  /// Retrieves the season for the current datetime instance
   Season get seasonSouth => seasonNorth.inverse;
+}
+
+extension on Season {
+  Season get inverse => Season.values[(index + 2) % 4];
 }
