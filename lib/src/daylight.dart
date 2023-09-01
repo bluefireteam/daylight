@@ -15,34 +15,57 @@ enum EventType {
 /// Enum that defines which sun events happens in a specific day
 enum DayType {
   /// A pretty normal day, with sunrise and sunset
-  sunriseAndSunset,
+  sunriseAndSunset(
+    isNoChange: false,
+    hasSunrise: true,
+    hasSunset: true,
+  ),
 
   /// A day with only sunrise, no sunset today
-  sunriseOnly,
+  sunriseOnly(
+    isNoChange: false,
+    hasSunrise: true,
+    hasSunset: false,
+  ),
 
   /// A day with only sunset, no sunrise today (winter is coming)
-  sunsetOnly,
+  sunsetOnly(
+    isNoChange: false,
+    hasSunrise: false,
+    hasSunset: true,
+  ),
 
   /// A day with no sun events, the sun is up all day
-  allDay,
+  allDay(
+    isNoChange: true,
+    hasSunrise: false,
+    hasSunset: false,
+  ),
 
   /// A day with no sun events, the sun is down all day (winter is here)
-  allNight,
+  allNight(
+    isNoChange: true,
+    hasSunrise: false,
+    hasSunset: false,
+  );
+
+  const DayType({
+    required this.isNoChange,
+    required this.hasSunrise,
+    required this.hasSunset,
+  });
+
+
+  /// Whether the day has no sun events
+  final bool isNoChange;
+
+  /// Whether the day has sunrise
+  final bool hasSunrise;
+
+  /// Whether the day has sunset
+  final bool hasSunset;
 }
 
-/// Extension that adds utility comparison methods into [DayType].
-extension DayTypeUtils on DayType {
-  /// See if this is a type that indicates no sun events
-  bool get isNoChange => this == DayType.allDay || this == DayType.allNight;
-
-  /// Define if [DayType] indicates sunrise.
-  bool get hasSunrise =>
-      this == DayType.sunriseOnly || this == DayType.sunriseAndSunset;
-
-  /// Define if [DayType] indicates sunset.
-  bool get hasSunset =>
-      this == DayType.sunsetOnly || this == DayType.sunriseAndSunset;
-}
 
 /// Enum that defines the sun position in the event.
 ///
