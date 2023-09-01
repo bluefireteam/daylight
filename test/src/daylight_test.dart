@@ -1,12 +1,13 @@
-import 'package:intl/intl.dart';
 import 'package:daylight/daylight.dart';
+import 'package:intl/intl.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const perth = const DaylightLocation(-31.953512, 115.857048);
-  const berlin = const DaylightLocation(52.518611, 13.408056);
+  const perth = DaylightLocation(-31.953512, 115.857048);
+  const berlin = DaylightLocation(52.518611, 13.408056);
   final july = DateTime(2020, 7, 15);
   final october = DateTime(2020, 10, 15);
+  
   group('Daylight', () {
     group('DayTypeUtils', () {
       test('isNoChange', () {
@@ -38,19 +39,19 @@ void main() {
       group('type', () {
         test('sunriseAndSunset', () {
           final daylightResult =
-              DaylightResult(DateTime.now(), DateTime.now(), july, perth);
+          DaylightResult(DateTime.now(), DateTime.now(), july, perth);
           expect(daylightResult.type, DayType.sunriseAndSunset);
         });
 
         test('sunriseOnly', () {
           final daylightResult =
-              DaylightResult(DateTime.now(), null, july, perth);
+          DaylightResult(DateTime.now(), null, july, perth);
           expect(daylightResult.type, DayType.sunriseOnly);
         });
 
         test('sunsetOnly', () {
           final daylightResult =
-              DaylightResult(null, DateTime.now(), july, perth);
+          DaylightResult(null, DateTime.now(), july, perth);
           expect(daylightResult.type, DayType.sunsetOnly);
         });
 
@@ -78,14 +79,14 @@ void main() {
     group('DaylightCalculator', () {
       group('calculateEvent', () {
         group('sunrise', () {
-          const calculator = const DaylightCalculator(perth);
+          const calculator = DaylightCalculator(perth);
           test('official', () {
             final time = calculator.calculateEvent(
               october,
               Zenith.official,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "21:36:33"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '21:36:33'); // UTC
             expect(time.isUtc, true);
           });
           test('nautical', () {
@@ -94,7 +95,7 @@ void main() {
               Zenith.nautical,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "20:42:09"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '20:42:09'); // UTC
             expect(time.isUtc, true);
           });
           test('civil', () {
@@ -103,7 +104,7 @@ void main() {
               Zenith.civil,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "21:11:36"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '21:11:36'); // UTC
             expect(time.isUtc, true);
           });
           test('astronomical', () {
@@ -112,7 +113,7 @@ void main() {
               Zenith.astronomical,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "20:11:56"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '20:11:56'); // UTC
             expect(time.isUtc, true);
           });
           test('golden', () {
@@ -121,19 +122,19 @@ void main() {
               Zenith.golden,
               EventType.sunrise,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "21:59:38"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '21:59:38'); // UTC
             expect(time.isUtc, true);
           });
         });
         group('sunset', () {
-          const calculator = const DaylightCalculator(berlin);
+          const calculator = DaylightCalculator(berlin);
           test('official', () {
             final time = calculator.calculateEvent(
               july,
               Zenith.official,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "19:21:47"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '19:21:47'); // UTC
             expect(time.isUtc, true);
           });
           test('nautical', () {
@@ -142,7 +143,7 @@ void main() {
               Zenith.nautical,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "21:17:10"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '21:17:10'); // UTC
             expect(time.isUtc, true);
           });
           test('civil', () {
@@ -151,7 +152,7 @@ void main() {
               Zenith.civil,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "20:08:08"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '20:08:08'); // UTC
             expect(time.isUtc, true);
           });
           test('astronomical', () {
@@ -168,7 +169,7 @@ void main() {
               Zenith.golden,
               EventType.sunset,
             );
-            expect(DateFormat("HH:mm:ss").format(time!), "18:43:17"); // UTC
+            expect(DateFormat('HH:mm:ss').format(time!), '18:43:17'); // UTC
             expect(time.isUtc, true);
           });
         });
@@ -176,16 +177,16 @@ void main() {
 
       group('calculateForDay', () {
         test('official', () {
-          const calculator = const DaylightCalculator(berlin);
+          const calculator = DaylightCalculator(berlin);
           final resultForDay = calculator.calculateForDay(october);
 
           expect(
-            DateFormat("HH:mm:ss").format(resultForDay.sunrise!),
-            "05:32:48",
+            DateFormat('HH:mm:ss').format(resultForDay.sunrise!),
+            '05:32:48',
           ); // UTC
           expect(
-            DateFormat("HH:mm:ss").format(resultForDay.sunset!),
-            "16:10:14",
+            DateFormat('HH:mm:ss').format(resultForDay.sunset!),
+            '16:10:14',
           ); // UTC
         });
       });
