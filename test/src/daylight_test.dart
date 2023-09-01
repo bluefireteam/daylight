@@ -14,11 +14,13 @@ void main() {
       expect(DayType.allDay.isNoChange, true);
       expect(DayType.allNight.isNoChange, true);
     });
+
     test('hasSunrise', () {
       expect(DayType.sunsetOnly.hasSunrise, false);
       expect(DayType.sunriseOnly.hasSunrise, true);
       expect(DayType.sunriseAndSunset.hasSunrise, true);
     });
+
     test('hasSunset', () {
       expect(DayType.allDay.hasSunset, false);
       expect(DayType.sunsetOnly.hasSunset, true);
@@ -89,6 +91,7 @@ void main() {
     group('calculateEvent', () {
       group('sunrise', () {
         const calculator = DaylightCalculator(perth);
+
         test('official', () {
           final time = calculator.calculateEvent(
             october,
@@ -98,6 +101,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '21:36:33'); // UTC
           expect(time.isUtc, true);
         });
+
         test('nautical', () {
           final time = calculator.calculateEvent(
             october,
@@ -107,6 +111,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '20:42:09'); // UTC
           expect(time.isUtc, true);
         });
+
         test('civil', () {
           final time = calculator.calculateEvent(
             october,
@@ -116,6 +121,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '21:11:36'); // UTC
           expect(time.isUtc, true);
         });
+
         test('astronomical', () {
           final time = calculator.calculateEvent(
             october,
@@ -125,6 +131,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '20:11:56'); // UTC
           expect(time.isUtc, true);
         });
+
         test('golden', () {
           final time = calculator.calculateEvent(
             october,
@@ -137,6 +144,7 @@ void main() {
       });
       group('sunset', () {
         const calculator = DaylightCalculator(berlin);
+
         test('official', () {
           final time = calculator.calculateEvent(
             july,
@@ -146,6 +154,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '19:21:47'); // UTC
           expect(time.isUtc, true);
         });
+
         test('nautical', () {
           final time = calculator.calculateEvent(
             july,
@@ -155,6 +164,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '21:17:10'); // UTC
           expect(time.isUtc, true);
         });
+
         test('civil', () {
           final time = calculator.calculateEvent(
             july,
@@ -164,6 +174,7 @@ void main() {
           expect(DateFormat('HH:mm:ss').format(time!), '20:08:08'); // UTC
           expect(time.isUtc, true);
         });
+
         test('astronomical', () {
           final time = calculator.calculateEvent(
             july,
@@ -172,6 +183,7 @@ void main() {
           );
           expect(time, null); // UTC
         });
+
         test('golden', () {
           final time = calculator.calculateEvent(
             july,
