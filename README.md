@@ -41,7 +41,7 @@ final berlinCalculator = DaylightCalculator(berlin);
 final dailyResults = berlinCalculator.calculateForDay(DateTime.now(), Zenith.astronomical);
 print(dailyResults.sunrise); // Some UTC datetime with sunrise hours like 08:32
 print(dailyResults.sunset);
-print(dailyResults.type); // day type, will probably be sunriseAndSunset if you dont live near the poles
+print(dailyResults.type); // day type, will probably be sunriseAndSunset unless you live near the north pole or south pole
 
 
 double eventHourEpoch = berlinCalculator.calculateEvent(DateTime.now(), Zenith.official, EventType.sunset);

@@ -16,6 +16,8 @@
   ],
   "useGitignore": true,
   "words": [
-    "daylight"
+    "daylight",
+    "geolocation",
+    "NNBD"
   ]
 }
