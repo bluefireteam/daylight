@@ -112,7 +112,7 @@ class DaylightResult extends Equatable {
   /// The date of the calculation.
   final DateTime date;
 
-  /// Define  which sun events happens in the snapshot date
+  /// Define which sun events happens in the snapshot date
   DayType get type {
     if (sunrise == null) {
       if (sunset == null) {
