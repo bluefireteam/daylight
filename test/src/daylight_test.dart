@@ -7,7 +7,7 @@ void main() {
   const berlin = DaylightLocation(52.518611, 13.408056);
   final july = DateTime(2020, 7, 15);
   final october = DateTime(2020, 10, 15);
-  
+
   group('Daylight', () {
     group('DayTypeUtils', () {
       test('isNoChange', () {
@@ -39,19 +39,19 @@ void main() {
       group('type', () {
         test('sunriseAndSunset', () {
           final daylightResult =
-          DaylightResult(DateTime.now(), DateTime.now(), july, perth);
+              DaylightResult(DateTime.now(), DateTime.now(), july, perth);
           expect(daylightResult.type, DayType.sunriseAndSunset);
         });
 
         test('sunriseOnly', () {
           final daylightResult =
-          DaylightResult(DateTime.now(), null, july, perth);
+              DaylightResult(DateTime.now(), null, july, perth);
           expect(daylightResult.type, DayType.sunriseOnly);
         });
 
         test('sunsetOnly', () {
           final daylightResult =
-          DaylightResult(null, DateTime.now(), july, perth);
+              DaylightResult(null, DateTime.now(), july, perth);
           expect(daylightResult.type, DayType.sunsetOnly);
         });
 
