@@ -200,4 +200,11 @@ void main() {
       });
     });
   });
+
+  group('$DaylightLocation', () {
+    test('equality', () {
+      // ignore: prefer_const_constructors
+      expect(berlin, DaylightLocation(52.518611, 13.408056));
+    });
+  });
 }
