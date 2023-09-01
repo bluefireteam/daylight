@@ -88,7 +88,7 @@ class DaylightResult extends Equatable {
   /// The specific coordinate location for the calculation.
   final DaylightLocation location;
 
-  /// The specific coordinate location for the calculation.
+  /// The date of the calculation.
   final DateTime date;
 
   /// Define  which sun events happens in the snapshot date
