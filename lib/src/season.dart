@@ -18,25 +18,24 @@ extension SeasonDate on DateTime {
   /// Retrieves the season for the current datetime instance
   Season get seasonNorth {
     switch (month) {
-      case 1 || 2:
+      case DateTime.january || DateTime.february:
         return Season.winter;
-      case 3:
+      case DateTime.march:
         return day < 21 ? Season.winter : Season.spring;
-      case 4 || 5:
+      case DateTime.april || DateTime.may:
         return Season.spring;
-      case 6:
+      case DateTime.june:
         return day < 21 ? Season.spring : Season.summer;
-      case 7 || 8:
+      case DateTime.july || DateTime.august:
         return Season.summer;
-      case 9:
+      case DateTime.september:
         return day < 22 ? Season.summer : Season.autumn;
-      case 10 || 11:
+      case DateTime.october || DateTime.november:
         return Season.autumn;
-      case 12:
+      case DateTime.december:
         return day < 22 ? Season.autumn : Season.winter;
-      default:
-        throw ArgumentError('This month does not exist #$month.');
     }
+    throw Exception('Invalid date');
   }
 
   /// Retrieves the season for the current datetime instance

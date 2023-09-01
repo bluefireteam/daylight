@@ -1,6 +1,13 @@
 import 'package:daylight/src/season.dart';
 import 'package:test/test.dart';
 
+class _StupidDateTime extends DateTime {
+  _StupidDateTime(int year, this.month, int day) : super(year, month, day);
+
+  @override
+  int month;
+}
+
 void main() {
   group('SeasonDate', () {
     test('winter', () {
@@ -27,6 +34,13 @@ void main() {
       expect(DateTime(2023, 10), isAutumn);
       expect(DateTime(2023, 11), isAutumn);
       expect(DateTime(2023, 12, 21), isAutumn);
+    });
+
+    test('invalid', () {
+      expect(
+        () => _StupidDateTime(2023, 13, 1).seasonNorth,
+        throwsA(isA<Exception>()),
+      );
     });
   });
 }
