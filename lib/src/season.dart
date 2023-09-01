@@ -20,7 +20,7 @@ extension SeasonDate on DateTime {
     switch (month) {
       case 1 || 2:
         return Season.winter;
-      case 3 :
+      case 3:
         return day < 21 ? Season.winter : Season.spring;
       case 4 || 5:
         return Season.spring;

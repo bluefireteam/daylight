@@ -55,7 +55,6 @@ enum DayType {
     required this.hasSunset,
   });
 
-
   /// Whether the day has no sun events
   final bool isNoChange;
 
@@ -65,7 +64,6 @@ enum DayType {
   /// Whether the day has sunset
   final bool hasSunset;
 }
-
 
 /// Enum that defines the sun position in the event.
 ///
