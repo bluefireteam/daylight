@@ -12,17 +12,10 @@ This is a simple implementation of the legendary [Sunset/Sunrise](https://web.ar
 
 **❗ In order to start using Daylight you must have the [Dart SDK][dart_install_link] installed on your machine.**
 
-Add `daylight` to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  daylight:
-```
-
 Install it:
 
 ```sh
-dart pub get
+dart pub add daylight
 ```
 
 ---
