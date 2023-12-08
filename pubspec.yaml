@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   equatable: ^2.0.5
-  intl: ^0.18.1
+  intl: ">=0.18.1 <0.20.0"
 
 dev_dependencies:
   mocktail: ^1.0.0
