@@ -23,16 +23,16 @@ void main() {
   // calculate for sunrise and sunset on astronomical twilight
   final astronomicalEvents = berlinSunCalculator.calculateForDay(
     december,
-    Zenith.official,
+    Zenith.astronomical,
   );
   print((
     "sunset",
     astronomicalEvents.sunset?.formatStandard(),
-  )); // utc: 15:54:09
+  )); // utc: 17:55:39
   print((
     "sunrise",
     astronomicalEvents.sunrise?.formatStandard(),
-  )); // utc: 07:42:15
+  )); // utc: 05:40:52
   print(astronomicalEvents.type); // DayType.sunriseAndSunset
 }
 

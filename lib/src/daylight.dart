@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:daylight/src/season.dart';
 import 'package:equatable/equatable.dart';
-// import 'package:intl/intl.dart';
 
 /// Enum that defines in with scope the zenith time will be calculated.
 enum EventType {
