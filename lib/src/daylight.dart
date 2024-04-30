@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:daylight/src/season.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 /// Enum that defines in with scope the zenith time will be calculated.
 enum EventType {
@@ -114,20 +114,16 @@ class DaylightResult extends Equatable {
 
   /// Define which sun events happens in the snapshot date
   DayType get type {
-    if (sunrise == null) {
-      if (sunset == null) {
-        final season = (location.isNorth) ? date.seasonNorth : date.seasonSouth;
-        if (season == Season.winter || season == Season.autumn) {
-          return DayType.allNight;
-        }
-        return DayType.allDay;
-      }
-      return DayType.sunsetOnly;
-    }
-    if (sunset == null) {
-      return DayType.sunriseOnly;
-    }
-    return DayType.sunriseAndSunset;
+    final season = (location.isNorth) ? date.seasonNorth : date.seasonSouth;
+
+    return switch ((sunrise, sunset)) {
+      (null, null) when season == Season.winter || season == Season.autumn =>
+        DayType.allNight,
+      (null, null) => DayType.allDay,
+      (null, _) => DayType.sunsetOnly,
+      (_, null) => DayType.sunriseOnly,
+      _ => DayType.sunriseAndSunset,
+    };
   }
 
   @override
@@ -144,8 +140,6 @@ class DaylightCalculator {
 
   /// Calculate both sunset and sunrise
   /// times for optional [Zenith] and returns in a [DaylightResult]
-  ///
-  /// Dates are UTC.
   DaylightResult calculateForDay(
     DateTime date, [
     Zenith zenith = Zenith.official,
@@ -157,11 +151,13 @@ class DaylightCalculator {
 
   /// Calculate the time of an specific sun event
   ///
-  /// Returns in UTC.
+  /// Returns a UTC [DateTime].
+  ///
+  /// Returns `null` if the event does not happen.
   DateTime? calculateEvent(DateTime date, Zenith zenith, EventType type) {
-    final lastMidnight = DateTime(date.year, date.month, date.day);
+    final lastMidnight = DateTime.utc(date.year, date.month, date.day);
 
-    final eventMils = _calculate(date, zenith, type);
+    final eventMils = _calculate(date.toUtc(), zenith, type);
     if (eventMils == null) {
       return null;
     }
@@ -199,7 +195,8 @@ class DaylightCalculator {
 
   double _longToHour(DateTime utc, int offset) {
     final baseLongHour = location.long / 15;
-    final dayOfYear = int.parse(DateFormat('D').format(utc));
+    final diff = utc.difference(DateTime.utc(utc.year));
+    final dayOfYear = diff.inDays;
 
     final difference = offset - baseLongHour;
 

@@ -2,33 +2,42 @@ import 'package:intl/intl.dart';
 import 'package:daylight/daylight.dart';
 
 void main() {
-  const berlin = const DaylightLocation(52.518611, 13.408056);
-  final october = DateTime(2020, 10, 15);
+  const london = const DaylightLocation(51.5072, 0.1276);
+  final december = DateTime.utc(2024, 12, 1);
 
   // Create berlin calculator
-  const berlinSunCalculator = const DaylightCalculator(berlin);
+  const berlinSunCalculator = const DaylightCalculator(london);
 
   // calculate for sunrise on civil twilight
   final civilSunrise = berlinSunCalculator.calculateEvent(
-    october,
+    december,
     Zenith.civil,
     EventType.sunrise,
   );
 
-  print(civilSunrise?.formatStandard()); // utc: 04:58:18
+  print((
+    "Civil sunrise:",
+    civilSunrise?.formatStandard(),
+  )); // utc: 07:03:16
 
   // calculate for sunrise and sunset on astronomical twilight
   final astronomicalEvents = berlinSunCalculator.calculateForDay(
-    october,
-    Zenith.astronomical,
+    december,
+    Zenith.official,
   );
-  print(astronomicalEvents.sunset?.formatStandard()); // utc: 18:03:55
-  print(astronomicalEvents.sunrise?.formatStandard()); // utc: 03:39:09
+  print((
+    "sunset",
+    astronomicalEvents.sunset?.formatStandard(),
+  )); // utc: 15:54:09
+  print((
+    "sunrise",
+    astronomicalEvents.sunrise?.formatStandard(),
+  )); // utc: 07:42:15
   print(astronomicalEvents.type); // DayType.sunriseAndSunset
 }
 
 extension on DateTime {
   String formatStandard() {
-    return DateFormat("HH:mm:ss").format(this);
+    return DateFormat("HH:mm:ss").format(this.toLocal());
   }
 }
