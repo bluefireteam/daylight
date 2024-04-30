@@ -154,9 +154,10 @@ class DaylightCalculator {
   ///
   /// Returns `null` if the event does not happen.
   DateTime? calculateEvent(DateTime date, Zenith zenith, EventType type) {
-    final lastMidnight = DateTime.utc(date.year, date.month, date.day);
+    final utcDate = date.toUtc();
+    final lastMidnight = DateTime.utc(utcDate.year, utcDate.month, utcDate.day);
 
-    final eventMils = _calculate(date.toUtc(), zenith, type);
+    final eventMils = _calculate(utcDate, zenith, type);
     if (eventMils == null) {
       return null;
     }
