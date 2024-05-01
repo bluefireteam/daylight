@@ -17,25 +17,17 @@ enum Season {
 extension SeasonDate on DateTime {
   /// Retrieves the season for the current datetime instance
   Season get seasonNorth {
-    switch (month) {
-      case DateTime.january || DateTime.february:
-        return Season.winter;
-      case DateTime.march:
-        return day < 21 ? Season.winter : Season.spring;
-      case DateTime.april || DateTime.may:
-        return Season.spring;
-      case DateTime.june:
-        return day < 21 ? Season.spring : Season.summer;
-      case DateTime.july || DateTime.august:
-        return Season.summer;
-      case DateTime.september:
-        return day < 22 ? Season.summer : Season.autumn;
-      case DateTime.october || DateTime.november:
-        return Season.autumn;
-      case DateTime.december:
-        return day < 22 ? Season.autumn : Season.winter;
-    }
-    throw Exception('Invalid date');
+    return switch (month) {
+      DateTime.january || DateTime.february => Season.winter,
+      DateTime.march => day < 21 ? Season.winter : Season.spring,
+      DateTime.april || DateTime.may => Season.spring,
+      DateTime.june => day < 21 ? Season.spring : Season.summer,
+      DateTime.july || DateTime.august => Season.summer,
+      DateTime.september => day < 22 ? Season.summer : Season.autumn,
+      DateTime.october || DateTime.november => Season.autumn,
+      DateTime.december => day < 22 ? Season.autumn : Season.winter,
+      _ => throw Exception('Invalid month $month'),
+    };
   }
 
   /// Retrieves the season for the current datetime instance
