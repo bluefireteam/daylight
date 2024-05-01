@@ -1,3 +1,7 @@
+## [3.1.0]
+- docs: Update README.md
+- feat: remove intl as dependency, fix UTC
+
 ## [3.0.0]
 - feat!: update SDK constraints to dart 3
 - chore: update dependencies
