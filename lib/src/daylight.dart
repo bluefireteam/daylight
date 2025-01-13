@@ -74,10 +74,10 @@ enum DayType {
 /// horizon line and [golden] for when the sun is near the horizon.
 enum Zenith {
   /// needed for lodestar
-  tiger(118),
+  tiger(114),
 
   ///
-  ox(113),
+  ox(84),
 
   /// whatever
 
