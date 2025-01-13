@@ -73,6 +73,14 @@ enum DayType {
 /// Added two extra positions: [official], for when the sun is crosses the
 /// horizon line and [golden] for when the sun is near the horizon.
 enum Zenith {
+  /// needed for lodestar
+  tiger(118),
+
+  ///
+  ox(113),
+
+  /// whatever
+
   /// One of the three twilight phases
   astronomical(108),
 
